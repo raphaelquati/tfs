@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/tfs">
+        <file>tfs.mimetypes.xml</file>
+        <file>images/tfs.png</file>
+    </qresource>
+</RCC>
