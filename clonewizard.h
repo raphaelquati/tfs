@@ -30,7 +30,9 @@
 #ifndef TFSCLONEWIZARD_H
 #define TFSCLONEWIZARD_H
 
+#include <vcsbase/basecheckoutwizardfactory.h>
 #include <vcsbase/basecheckoutwizard.h>
+
 
 #include <QIcon>
 
@@ -42,12 +44,11 @@ class CloneWizard : public VcsBase::BaseCheckoutWizard
     Q_OBJECT
 
 public:
-    CloneWizard();
+    CloneWizard(const Utils::FileName &path, QWidget *parent);
 
 protected:
-    QList<QWizardPage *> createParameterPages(const QString &path);
-    VcsBase::Command *createCommand(const QList<QWizardPage *> &parameterPages,
-                                    QString *checkoutPath);
+    //QList<QWizardPage *> createParameterPages(const QString &path);
+    VcsBase::VcsCommand *createCommand(Utils::FileName *checkoutDir);
 
 private:
     const QIcon m_icon;

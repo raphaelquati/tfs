@@ -46,7 +46,7 @@ bool TfsControl::managesFile(const QString &workingDirectory, const QString &fil
 bool TfsControl::isConfigured() const
 {
     //DONE
-    const QString binary = tfsClient->settings()->binaryPath();
+    const QString binary = tfsClient->settings()->binaryPath().toString();
     if (binary.isEmpty())
         return false;
     QFileInfo fi(binary);

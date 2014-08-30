@@ -6,7 +6,6 @@
 
 #include <vcsbase/vcsbaseclient.h>
 #include <vcsbase/vcsbaseplugin.h>
-#include <vcsbase/command.h>
 
 namespace Tfs {
 namespace Internal {
@@ -64,7 +63,7 @@ public:
     void listWorkspaces();
 
 protected:
-    Core::Id vcsEditorKind(VcsCommand cmd) const;
+    Core::Id vcsEditorKind(VcsCommandTag cmd) const;
     QStringList revisionSpec(const QString &revision) const;
     VcsBase::VcsBaseEditorParameterWidget *createDiffEditor(const QString &workingDir,
                                                             const QStringList &files,

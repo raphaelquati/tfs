@@ -49,7 +49,7 @@ isEmpty(QTCREATOR_SOURCES):QTCREATOR_SOURCES=../qt-creator
 
 ## set the QTC_BUILD environment variable to override the setting here
 IDE_BUILD_TREE = $$(QTC_BUILD)
-isEmpty(IDE_BUILD_TREE):IDE_BUILD_TREE=../qt-creator-build
+isEmpty(IDE_BUILD_TREE):IDE_BUILD_TREE=../build-qt-creator
 
 ## uncomment to build plugin into user config directory
 ## <localappdata>/plugins/<ideversion>

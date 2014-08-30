@@ -34,7 +34,7 @@
 #include "tfsconstants.h"
 
 #include <coreplugin/iversioncontrol.h>
-#include <vcsbase/command.h>
+#include <vcsbase/vcscommand.h>
 #include <vcsbase/vcsbaseconstants.h>
 #include <vcsbase/vcsconfigurationpage.h>
 #include <QDir>
@@ -43,49 +43,47 @@
 using namespace Tfs::Internal;
 using namespace VcsBase;
 
-CloneWizard::CloneWizard()
+CloneWizard::CloneWizard(const Utils::FileName &path, QWidget *parent) :
+    BaseCheckoutWizard(path, parent)
 {
-    setId(QLatin1String(VcsBase::Constants::VCS_ID_TFS));
-    setCustomLabels(tr("Cloning"), tr("Cloning started..."));
-    setIcon(QIcon(QLatin1String(":/tfs/images/tfs.png")));
-    setDescription(tr("Setup a Tfs workspace and tries to get last version of the project."));
-    setDisplayName(tr("Tfs Clone"));
-}
+    setTitle(tr("Cloning"));
+    setStartedStatus(tr("Cloning started..."));
 
-QList<QWizardPage *> CloneWizard::createParameterPages(const QString &path)
-{
-    QList<QWizardPage *> wizardPageList;
     const Core::IVersionControl *vc = TfsPlugin::instance()->versionControl();
     if (!vc->isConfigured())
-        wizardPageList.append(new VcsConfigurationPage(vc));
+        addPage(new VcsConfigurationPage(vc));
+    //addPage(new CloneOptionsPanel(vc));
+
     CloneWizardPage *page = new CloneWizardPage;
-    page->setPath(path);
-    wizardPageList.append(page);
-    return wizardPageList;
+    page->setPath(path.toString());
+    addPage(page);
 }
 
-Command *CloneWizard::createCommand(const QList<QWizardPage *> &parameterPages,
-                                    QString *checkoutPath)
+VcsCommand *CloneWizard::createCommand(Utils::FileName *checkoutDir)
 {
     //TODO: cannot use password this way. It will appear in Logs!!!!
 
-    const CloneWizardPage *page = qobject_cast<const CloneWizardPage *>(parameterPages.front());
+    const CloneWizardPage *cwp = 0;
+    foreach (int pageId, pageIds()) {
+        if ((cwp = qobject_cast<const CloneWizardPage *>(page(pageId))))
+            break;
+    }
 
-    if (!page)
+    if (!cwp)
         return 0;
 
     const TfsSettings &settings = TfsPlugin::settings();
 
-    const CloneOptionsPanel *optionsPanel = page->cloneOptionsPanel();
+    const CloneOptionsPanel *optionsPanel = cwp->cloneOptionsPanel();
 
-    QString path = page->path();
-    QString directory = page->directory();
+    QString path = cwp->path();
+    QString directory = cwp->directory();
 
     QString workspaceName = QString(QLatin1String("QtCreator-%1")).arg(directory); //TODO: Create uniqueName!
-    QString collection = QString(QLatin1String("-collection:%1")).arg(page->repository());
+    QString collection = QString(QLatin1String("-collection:%1")).arg(cwp->repository());
     QString workspace = QString(QLatin1String("-workspace:%1")).arg(workspaceName);
 
-    *checkoutPath = path + QLatin1Char('/') + directory;
+    *checkoutDir = Utils::FileName::fromString(path + QLatin1Char('/') + directory);
 
     //QDir().mkdir(*checkoutPath); //Tfs doesn't create the dir......
 
@@ -110,8 +108,9 @@ Command *CloneWizard::createCommand(const QList<QWizardPage *> &parameterPages,
         args3 = TfsClient::addAuthenticationOptions(args3, optionsPanel->authUsername(), optionsPanel->authPassword());
     }
 
-    VcsBase::Command *command = new VcsBase::Command(settings.binaryPath(), path,
-                                                     QProcessEnvironment::systemEnvironment());
+    VcsCommand *command = new VcsCommand(settings.binaryPath(), path,
+                                         QProcessEnvironment::systemEnvironment());
+
     command->addJob(args, -1);
     command->addJob(args2, -1);
     command->addJob(args3, -1);

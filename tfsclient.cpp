@@ -3,6 +3,7 @@
 #include <QFileInfo>
 #include <QSignalMapper>
 
+
 namespace Tfs {
 namespace Internal {
 
@@ -135,7 +136,7 @@ QString TfsClient::findTopLevelForFile(const QFileInfo &file) const
                                                                    repositoryCheckFile);
 }
 
-Core::Id TfsClient::vcsEditorKind(VcsCommand cmd) const
+Core::Id TfsClient::vcsEditorKind(VcsCommandTag cmd) const
 {
     switch (cmd) {
     case AnnotateCommand:
@@ -198,12 +199,12 @@ void TfsClient::listWorkspaces()
 
     addAuthenticationOptions(args, QLatin1String("****"), QLatin1String("****"));
 
-    VcsBase::Command *command = createCommand(QLatin1String("."));
+    VcsBase::VcsCommand *command = createCommand(QLatin1String("."));
 //    connect(command, SIGNAL(output(QString)),  [=](const QString &newValue) {
 //        parser->parse(newValue);
 //    });
 
-    connect(command, SIGNAL(output(QString)), this, SIGNAL(parseWorkspaceOutput(QString)));
+    //command->connect(SIGNAL(output(const QString &)), this, SIGNAL(parseWorkspaceOutput(const QString &)));
 }
 
 

@@ -71,7 +71,15 @@ bool TfsPlugin::initialize(const QStringList &arguments, QString *errorString)
 
 //    addAutoReleasedObject(new VcsSubmitEditorFactory<CommitEditor>(&submitEditorParameters));
 
-    addAutoReleasedObject(new CloneWizard);
+    auto cloneWizardFactory = new BaseCheckoutWizardFactory;
+    cloneWizardFactory->setId(QLatin1String(VcsBase::Constants::VCS_ID_TFS));
+    cloneWizardFactory->setIcon(QIcon(QLatin1String(":/tfs/images/hg.png")));
+    cloneWizardFactory->setDescription(tr("Setup a new Workspace and try to get last version from Team Foundation."));
+    cloneWizardFactory->setDisplayName(tr("Tfs Clone"));
+    cloneWizardFactory->setWizardCreator([this] (const FileName &path, QWidget *parent) {
+        return new CloneWizard(path, parent);
+    });
+    addAutoReleasedObject(cloneWizardFactory);
 
     const QString prefix = QLatin1String("tf");
     m_commandLocator = new Core::CommandLocator("TFS", prefix, prefix);
@@ -167,6 +175,8 @@ void TfsPlugin::createRepositoryActions(const Core::Context &context)
     connect(action, SIGNAL(triggered()), this, SLOT(workspaces()));
     tfsContainer->addAction(command);
     m_commandLocator->appendCommand(command);
+
+    action->setEnabled(m_instance->versionControl()->isConfigured());
 }
 
 void TfsPlugin::createRepositoryManagementActions(const Core::Context &context)
@@ -185,6 +195,4 @@ bool TfsPlugin::submitEditorAboutToClose()
 {
     return false;
 }
-
-Q_EXPORT_PLUGIN2(Tfs, TfsPlugin)
 
