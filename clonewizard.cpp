@@ -32,6 +32,7 @@
 #include "tfsplugin.h"
 #include "tfssettings.h"
 #include "tfsconstants.h"
+#include "tfsserverwizardpage.h"
 
 #include <coreplugin/iversioncontrol.h>
 #include <vcsbase/vcscommand.h>
@@ -49,10 +50,13 @@ CloneWizard::CloneWizard(const Utils::FileName &path, QWidget *parent) :
     setTitle(tr("Cloning"));
     setStartedStatus(tr("Cloning started..."));
 
+    addPage(new TfsServerWizardPage);
+
     const Core::IVersionControl *vc = TfsPlugin::instance()->versionControl();
-    if (!vc->isConfigured())
+    if (!vc->isConfigured()) {
         addPage(new VcsConfigurationPage(vc));
-    //addPage(new CloneOptionsPanel(vc));
+    }
+
 
     CloneWizardPage *page = new CloneWizardPage;
     page->setPath(path.toString());

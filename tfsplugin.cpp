@@ -71,9 +71,10 @@ bool TfsPlugin::initialize(const QStringList &arguments, QString *errorString)
 
 //    addAutoReleasedObject(new VcsSubmitEditorFactory<CommitEditor>(&submitEditorParameters));
 
+
     auto cloneWizardFactory = new BaseCheckoutWizardFactory;
     cloneWizardFactory->setId(QLatin1String(VcsBase::Constants::VCS_ID_TFS));
-    cloneWizardFactory->setIcon(QIcon(QLatin1String(":/tfs/images/hg.png")));
+    cloneWizardFactory->setIcon(QIcon(QLatin1String(":/tfs/images/tfs.png")));
     cloneWizardFactory->setDescription(tr("Setup a new Workspace and try to get last version from Team Foundation."));
     cloneWizardFactory->setDisplayName(tr("Tfs Clone"));
     cloneWizardFactory->setWizardCreator([this] (const FileName &path, QWidget *parent) {

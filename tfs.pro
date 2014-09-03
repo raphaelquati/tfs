@@ -15,7 +15,9 @@ SOURCES += tfsplugin.cpp \
     tfsworkspacedialog.cpp \
     tfsdatatypes.cpp \
     tfsworkspacedialogedit.cpp \
-    tfsworkspacemodel.cpp
+    tfsworkspacemodel.cpp \
+    tfsserverwidget.cpp \
+    tfsserverwizardpage.cpp
 
 HEADERS += tfsplugin.h\
         tfs_global.h\
@@ -30,7 +32,9 @@ HEADERS += tfsplugin.h\
     tfsworkspacedialog.h \
     tfsdatatypes.h \
     tfsworkspacedialogedit.h \
-    tfsworkspacemodel.h
+    tfsworkspacemodel.h \
+    tfsserverwidget.h \
+    tfsserverwizardpage.h
 
 RESOURCES += \
     tfs.qrc
@@ -39,7 +43,10 @@ FORMS += \
     optionpage.ui \
     cloneoptionspanel.ui \
     tfsworkspacedialog.ui \
-    tfsworkspacedialogedit.ui
+    tfsworkspacedialogedit.ui \
+    tfsserverwidget.ui \
+    tfsserverlistdialog.ui \
+    tfsserveradddialog.ui
 
 # Qt Creator linking
 

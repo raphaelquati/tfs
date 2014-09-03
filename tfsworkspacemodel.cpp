@@ -70,8 +70,9 @@ QVariant TfsWorkspaceModel::headerData(int section, Qt::Orientation orientation,
 
 void TfsWorkspaceModel::setModelData(const QList<TfsWorkspace *> &list)
 {
+    beginResetModel();
     _model = list;
-    reset();
+    endResetModel();
 }
 
 TfsWorkspace* TfsWorkspaceModel::getTfsWorkspace(const QModelIndex &index)

@@ -91,7 +91,7 @@ void OptionsPage::apply()
     }
 }
 
-//bool OptionsPage::matches(const QString &s) const
-//{
-//    return m_searchKeywords.contains(s, Qt::CaseInsensitive);
-//}
+void OptionsPage::finish()
+{
+    delete optionsPageWidget;
+}
