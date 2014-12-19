@@ -29,6 +29,9 @@
 
 #include "clonewizardpage.h"
 #include "cloneoptionspanel.h"
+#include "tfsplugin.h"
+#include "tfscontrol.h"
+#include "tfsclient.h"
 
 using namespace Tfs::Internal;
 
@@ -39,8 +42,11 @@ CloneWizardPage::CloneWizardPage(QWidget *parent)
     setTitle(tr("Location"));
     setSubTitle(tr("Specify collection URL, root workspace directory and path."));
     setRepositoryLabel(tr("Collection URL:"));
-    setBranchSelectorVisible(false);
+    setBranchSelectorVisible(true);
+    setDirectoryVisible(false);
     addLocalControl(m_optionsPanel);
+
+    //connect(this, SIGNAL())
 }
 
 const CloneOptionsPanel *CloneWizardPage::cloneOptionsPanel() const
@@ -59,4 +65,10 @@ QString CloneWizardPage::directoryFromRepository(const QString &repository) cons
 
     // Take the basename or the repository url.
     return repo.mid(repo.lastIndexOf(slash) + 1);
+}
+
+QStringList CloneWizardPage::branches(const QString &repository, int *current)
+{
+    TfsPlugin::instance()->client()->setCurrentCollectionURL(repository);
+    return  TfsPlugin::instance()->client()->listRemoteDirectory(QLatin1String(""));
 }

@@ -176,5 +176,12 @@ void TfsControl::emitConfigurationChanged()
     emit configurationChanged();
 }
 
+QStringList TfsControl::listRemoteDirectory(QString path) {
+    if (path.isEmpty()) {
+        path = QLatin1String("$/");
+    }
+    return tfsClient->listRemoteDirectory(path);
+}
+
 } // namespace Internal
 } // namespace Tfs

@@ -50,7 +50,7 @@ CloneWizard::CloneWizard(const Utils::FileName &path, QWidget *parent) :
     setTitle(tr("Cloning"));
     setStartedStatus(tr("Cloning started..."));
 
-    addPage(new TfsServerWizardPage);
+    //addPage(new TfsServerWizardPage);
 
     const Core::IVersionControl *vc = TfsPlugin::instance()->versionControl();
     if (!vc->isConfigured()) {

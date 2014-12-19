@@ -62,6 +62,9 @@ public:
     //Tfs Specifics
     void listWorkspaces();
 
+    QStringList listRemoteDirectory(QString path);
+
+    void setCurrentCollectionURL(const QString &url);
 protected:
     Core::Id vcsEditorKind(VcsCommandTag cmd) const;
     QStringList revisionSpec(const QString &revision) const;
@@ -69,6 +72,9 @@ protected:
                                                             const QStringList &files,
                                                             const QStringList &extraOptions);
     StatusItem parseStatusLine(const QString &line) const;
+
+private:
+    QString m_currentCollectionURL;
 
 signals:
     void parseWorkspaceOutput(const QString &output);

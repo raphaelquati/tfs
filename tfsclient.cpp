@@ -3,6 +3,14 @@
 #include <QFileInfo>
 #include <QSignalMapper>
 
+#include <utils/synchronousprocess.h>
+#include <utils/fileutils.h>
+#include <vcsbase/vcscommand.h>
+#include <vcsbase/vcsoutputwindow.h>
+#include <vcsbase/vcsbaseplugin.h>
+
+using namespace Utils;
+using namespace VcsBase;
 
 namespace Tfs {
 namespace Internal {
@@ -190,6 +198,58 @@ QStringList TfsClient::addAuthenticationOptions(const QStringList &args,
 
     rc.append(args);
     return rc;
+}
+
+QStringList TfsClient::listRemoteDirectory(QString path) {
+    QStringList retList;
+
+    if (path.isEmpty()) {
+        path = QLatin1String("$\\");
+    }
+
+    const unsigned flags = VcsBasePlugin::SshPasswordPrompt |
+            VcsBasePlugin::ShowStdOutInLogWindow |
+            VcsBasePlugin::ShowSuccessMessage;
+
+    QString collection = QString(QLatin1String("-collection:%1")).arg(m_currentCollectionURL);
+
+    QStringList arguments;
+    arguments << QLatin1String("dir") << path << collection;
+
+    const SynchronousProcessResponse resp =
+            vcsSynchronousExec(/*workingDirectory.path()*/ QLatin1String("."), arguments, flags);
+    if (resp.result == SynchronousProcessResponse::Finished) {
+        QStringList ret = resp.stdOut.split(QLatin1String("\n"));
+
+        bool remove = false;
+        foreach (QString entry, ret) {
+            if (entry.isEmpty()) {
+                remove = true;
+            } else {
+                if (!remove) {
+                    retList.append(entry);
+                }
+            }
+        }
+    }
+
+
+    return retList;
+
+//    QStringList args;
+//    args << QLatin1String("dir") << QLatin1String(path) << QLatin1String(m_currentCollectionURL);
+//    //addAuthenticationOptions(args, QLatin1String("****"), QLatin1String("****"));
+
+//    VcsBase::VcsCommand *command = createCommand(QLatin1String("."));
+//    command->addJob(args);
+//    //command->addFlags(additionalFlags);
+
+//    command->connect(SIGNAL(output(const QString &)), this, SIGNAL(parseWorkspaceOutput(const QString &)));
+}
+
+void TfsClient::setCurrentCollectionURL(const QString & url)
+{
+    m_currentCollectionURL = url;
 }
 
 void TfsClient::listWorkspaces()

@@ -46,6 +46,7 @@ public:
 
 protected:
     QString directoryFromRepository(const QString &rrepository) const;
+    QStringList branches(const QString &repository, int *current);
 
 private:
     CloneOptionsPanel *m_optionsPanel;

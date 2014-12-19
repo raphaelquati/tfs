@@ -38,6 +38,7 @@ public:
     bool vcsRemoveSnapshot(const QString &topLevel, const QString &name);
     bool vcsAnnotate(const QString &file, int line);
 
+    QStringList listRemoteDirectory(QString path);
 public slots:
     void changed(const QVariant&);
     void emitConfigurationChanged();
