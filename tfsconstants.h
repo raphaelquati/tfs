@@ -20,6 +20,7 @@ const char MENU_ID[] = "tfs.Menu";
 
 const char TFSDEFAULT[] = "tf";
 const char TFSREPO[] = "$tf";
+const char TFS_CONTEXT[] = "Tfs Context";
 
 //// Base editor parameters
 //const char COMMANDLOG_ID[] = "TFS Command Log Editor";

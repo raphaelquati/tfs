@@ -53,9 +53,11 @@ bool TfsPlugin::initialize(const QStringList &arguments, QString *errorString)
     Q_UNUSED(arguments)
     Q_UNUSED(errorString)
 
+    Core::Context context(Constants::TFS_CONTEXT);
+
 //    typedef VcsEditorFactory<MercurialEditor> TfsEditorFactory;
     m_client = new TfsClient(&tfsSettings);
-    initializeVcs(new TfsControl(m_client));
+    initializeVcs(new TfsControl(m_client), context);
 
     optionsPage = new OptionsPage();
     addAutoReleasedObject(optionsPage);
